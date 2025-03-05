@@ -1,11 +1,10 @@
 package com.example.springboard.domain.post.entity;
 
+import com.example.springboard.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * fileName     : Post.java
@@ -14,7 +13,7 @@ import java.util.List;
  * description  : 게시글 Entity
  */
 @Entity
-@Getter
+@Data
 @NoArgsConstructor
 public class Post {
     @Id
@@ -24,19 +23,14 @@ public class Post {
     private String title;
     @Column(nullable = false, length = 1000)
     private String content;
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //private User author;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User author;
 
-    /*public Post(String title, String content, String author) {
+    public Post(String title, String content, User author) {
         this.title = title;
         this.content = content;
         this.author = author;
-    }*/
-    public Post(String title, String content) {
-        this.title = title;
-        this.content = content;
     }
 
     public void update(String title, String content) {
