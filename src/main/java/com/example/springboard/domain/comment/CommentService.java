@@ -33,13 +33,22 @@ public class CommentService {
      * @param userName
      * @return
      */
-    public Comment createComment(Long postId, String content, String userName) {
+    /*public Comment createComment(Long postId, String content, String userName) {
         User author = userRepository.findByUserName(userName)
                 .orElseThrow(()-> new RuntimeException("User not found"));
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new RuntimeException("Post not found"));
 
         return commentRepository.save(new Comment(content, post, author));
+    }*/
+    public Comment addComment(Post post, User author, String content, Comment parent) {
+        Comment comment = Comment.builder()
+                .content(content)
+                .post(post)
+                .author(author)
+                .parent(parent)
+                .build();
+        return commentRepository.save(comment);
     }
 
     /**
@@ -55,15 +64,23 @@ public class CommentService {
      * 댓글 삭제
      * @param commentId
      */
-    public void deleteComment(Long commentId) {
+    /*public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
+    }*/
+    public void deleteComment(Long commentId, User user) {
+        commentRepository.findById(commentId).ifPresent(comment -> {
+            if (comment.getAuthor().equals(user)) {
+                comment.setContent("삭제된 메시지 입니다");
+                commentRepository.save(comment);
+            }
+        });
     }
 
-    public Comment updateComment(Long commentId, String content) {
+    /*public Comment updateComment(Long commentId, String content) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(()-> new RuntimeException("Comment not found"));
         comment.update(content);
 
         return comment;
-    }
+    }*/
 }

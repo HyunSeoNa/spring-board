@@ -3,6 +3,7 @@ package com.example.springboard.domain.user;
 import com.example.springboard.domain.user.entity.User;
 import com.example.springboard.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,9 +16,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public User register(String userName, String password) {
-        return userRepository.save(new User(userName, password));
+    public User addUser(String username, String password) {
+        User user = User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .role("USER")
+                .build();
+        return userRepository.save(user);
     }
 
     public User getUser(String userName) {

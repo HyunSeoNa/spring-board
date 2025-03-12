@@ -10,5 +10,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * description  : Post Repository
  */
 public interface PostRepository extends JpaRepository<Post, Long> {
-
 }

@@ -23,17 +23,30 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Post creatPost(String title, String content, String userName) {
+    /*public Post addPost(String title, String content, String userName) {
         User author = userRepository.findByUserName(userName)
                 .orElseThrow(()-> new RuntimeException("User not found"));
         return postRepository.save(new Post(title, content, author));
+    }*/
+
+    public Post addPost(String title, String content, User author) {
+        Post post = Post.builder()
+                .title(title)
+                .content(content)
+                .author(author)
+                .build();
+        return postRepository.save(post);
     }
 
     public List<Post> getListPost() {
         return postRepository.findAll();
     }
 
-    public void deletePost(Long postId) {
-        postRepository.deleteById(postId);
+    public void deletePost(Long postId, User user) {
+        postRepository.findById(postId).ifPresent(post -> {
+            if (post.getAuthor().equals(user)) {
+                postRepository.delete(post);
+            }
+        });
     }
 }
