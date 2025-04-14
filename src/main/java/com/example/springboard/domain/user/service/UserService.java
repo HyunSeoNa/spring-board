@@ -107,7 +107,7 @@ public class UserService implements UserDetailsService {
 
         return User.builder()
                 .username(userEntity.getUsername())
-                .password(passwordEncoder.encode(userEntity.getPassword()))
+                .password(userEntity.getPassword())
                 .roles(userEntity.getRole().toString())
                 .build();
     }
