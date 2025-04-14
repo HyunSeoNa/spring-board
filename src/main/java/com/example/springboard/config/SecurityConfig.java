@@ -37,6 +37,7 @@ public class SecurityConfig {
         // 점근 경로별 인가 설정
         http
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/user/join").permitAll()
                         .requestMatchers("/user/update/**").hasRole("USER")
                         .requestMatchers("/**").permitAll());

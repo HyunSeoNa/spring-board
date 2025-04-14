@@ -1,0 +1,10 @@
+# mustace 한글 표시문제
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+spring:
+  mustache:
+    servlet:
+      expose-request-attributes: true
